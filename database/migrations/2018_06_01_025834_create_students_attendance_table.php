@@ -17,11 +17,10 @@ class CreateStudentsAttendanceTable extends Migration
             $table->increments('id');
 
             $table->unsignedInteger('student_id'); //NOTE: Foreign Key users->id
-            $table->unsignedInteger('class_id'); //NOTE: Foreign Key classes->id
             $table->unsignedInteger('subject_id'); //NOTE: Foreign Key subjects->id
             
             $table->boolean('status');
-            $table->timestamp('att_date');
+            $table->date('att_date');
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
         });

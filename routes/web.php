@@ -16,7 +16,6 @@ Auth::Routes();
 
 /**
  * //TODO:
- * Work on pagination at noticeboard page with ajax.
  */
 
 
@@ -61,6 +60,7 @@ Route::post('/api/noticeboard_json', 'APIController@noticeboard_json');
 Route::get('/api/teachers_json', 'APIController@teachers_json');
 Route::get('/api/studentscontact_json', 'APIController@studentscontact_json');
 Route::get('/api/routine_json', 'APIController@routine_json');
+Route::get('/api/attendance_json', 'APIController@attendance_json');
 
 /**
 * Student Controllers Global

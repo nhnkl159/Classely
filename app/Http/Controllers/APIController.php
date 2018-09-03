@@ -12,6 +12,7 @@ use App\Models\UsersModel as UsersModel;
 use App\Models\Subjects as Subjects;
 use App\Models\Classes as Classes;
 use App\Models\Routine as Routine;
+use App\Models\Attendance as Attendance;
 use App\Models\GlobalMessages;
 
 class APIController extends Controller
@@ -179,20 +180,71 @@ class APIController extends Controller
             //Student
             if(Auth::user()->role_id == 5)
             {
-                $tempArr = [];
+                $tempArr = collect();
                 $class_id = UsersModel::find($user_id)->student_class()->first();
                 $routine = Routine::where('class_id', $class_id->id)->get();
                 
                 foreach($routine as $class)
                 {
                     $subject = Subjects::where('id', $class->subject_id)->first();
-                    $tempArr[] = [
-                      'title' => $subject->name,
-                      'dow' => [$class->day_id-1],
-                      'start' => $class->time_start,
-                      'end' => $class->time_end,
-                      'color' => $class->color,
-                    ];
+                    $tempArr->push([
+                        'title' => $subject->name,
+                        'dow' => [$class->day_id-1],
+                        'start' => $class->time_start,
+                        'end' => $class->time_end,
+                        'color' => $class->color,
+                    ]);
+                }
+
+                return response()->json($tempArr);
+            }
+            return response()->json([
+                'status' => false
+            ], 500);
+        }
+    }
+
+    /**
+    * Handle the attendance json api
+    * 
+    * @param  \Illuminate\Http\Request $request
+    *
+    * @return Response
+    */
+    public function attendance_json(Request $request)
+    {
+        if ($request->ajax())
+        {
+            $user_id = Auth::user()->id;
+            //Student
+            if(Auth::user()->role_id == 5)
+            {
+                $tempArr = collect();
+
+                $attendance = Attendance::where('student_id', $user_id)->get();
+                
+                foreach($attendance as $day)
+                {
+                    if($tempArr->contains('start', $day->att_date))
+                    {
+                        if($day->status == 1)
+                        {
+                            $key = $tempArr->search(function($item) use($day) {
+                                return $item['start'] == $day->att_date;
+                            });
+                            $temp = $tempArr->toArray();
+                            $temp[$key]['status'] = 1;
+                            $tempArr = collect($temp);
+                        }
+
+                    }
+                    else
+                    {
+                        $tempArr->push([
+                          'start' => $day->att_date,
+                          'status' => $day->status,
+                        ]);
+                    }
                 }
 
                 return response()->json($tempArr);

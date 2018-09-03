@@ -27,7 +27,7 @@
 
                     <!-- Logo -->
                     <div class="content-header-item">
-                        <a class="link-effect font-w700" href="">
+                        <a class="link-effect font-w700" href="/">
                             <i class="fa fa-graduation-cap text-primary"></i>
                             <span class="font-size-xl text-dual-primary-dark">Clas</span><span class="font-size-xl text-primary">sely</span>
                         </a>
