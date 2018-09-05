@@ -49,6 +49,7 @@ Route::get('/teachers', 'TeachersController@index')->name('teachers');
 Route::get('/studentscontact', 'UsersController@indextudentscontact')->name('studentscontact');
 Route::get('/routine', 'RouteController@index')->name('routine');
 Route::get('/behaviour', 'BehaviourController@index')->name('behaviour');
+Route::get('/exams_schedule', 'ExamsScheduleController@index')->name('exams_schedule');
 /**
 * API Controllers Global
 * Global api functions and routes.
@@ -66,4 +67,5 @@ Route::get('/api/routine_json', 'APIController@routine_json');
 Route::get('/api/attendance_json', 'APIController@attendance_json');
 Route::get('/api/behaviour_json', 'APIController@behaviour_json');
 Route::get('/api/behavior_chart', 'APIController@behavior_chart');
+Route::get('/api/exams_schedule_json', 'APIController@exams_schedule_json');
 

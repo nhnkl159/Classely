@@ -14,6 +14,7 @@ use App\Models\Classes as Classes;
 use App\Models\Routine as Routine;
 use App\Models\Attendance as Attendance;
 use App\Models\Behaviour as Behaviour;
+use App\Models\ExamsSchedule as ExamsSchedule;
 use App\Models\GlobalMessages;
 
 class APIController extends Controller
@@ -41,7 +42,10 @@ class APIController extends Controller
                 return $page_num;
             });
 
-            $messages = Schools::find(Auth::user()->school_id)->globalmessages()->orderBy('created_at', 'desc')->paginate(6);
+            $messages = Schools::find(Auth::user()->school_id)->globalmessages()->orderBy('global_messages.created_at', 'desc')
+            ->join('schools', 'schools.academic_id', '=', 'global_messages.academic_id')
+            ->where('schools.id',  Auth::user()->school_id)
+            ->paginate(6);
 
             if(isset($request['totalpage']))
             {
@@ -234,7 +238,10 @@ class APIController extends Controller
             {
                 $tempArr = collect();
 
-                $attendance = Attendance::where('student_id', $user_id)->get();
+                $attendance = Attendance::where('student_id', $user_id)
+                ->join('schools', 'schools.academic_id', '=', 'students_attendance.academic_id')
+                ->where('schools.id',  Auth::user()->school_id)
+                ->get();
                 
                 foreach($attendance as $day)
                 {
@@ -283,7 +290,11 @@ class APIController extends Controller
             //Student
             if(Auth::user()->role_id == 5)
             {
-                $events = Behaviour::where('student_id', $user_id)->orderBy('behav_date', 'desc')->join('behaviour_types', 'students_behaviour.behaviour_type', '=', 'behaviour_types.id')->get();
+                $events = Behaviour::where('student_id', $user_id)->orderBy('behav_date', 'desc')
+                ->join('behaviour_types', 'students_behaviour.behaviour_type', '=', 'behaviour_types.id')
+                ->join('schools', 'schools.academic_id', '=', 'students_behaviour.academic_id')
+                ->where('schools.id',  Auth::user()->school_id)
+                ->get();
 
                 return response()->json([
                     'status' => true,
@@ -316,7 +327,7 @@ class APIController extends Controller
             {
                 foreach($types as $type)
                 {
-                    $tempArr[$type->behaviour_name] = Behaviour::where('behaviour_type', $type->id)->count();
+                    $tempArr[$type->behaviour_name] = Behaviour::where('behaviour_type', $type->id)->join('schools', 'schools.academic_id', '=', 'students_behaviour.academic_id')->where('schools.id',  Auth::user()->school_id)->count();
                 }
 
                 return response()->json([
@@ -330,4 +341,54 @@ class APIController extends Controller
             ]);
         }
     }
+
+    /**
+    * Handle the routine json api
+    * 
+    * @param  \Illuminate\Http\Request $request
+    *
+    * @return Response
+    */
+    public function exams_schedule_json(Request $request)
+    {
+        if ($request->ajax())
+        {
+            $user_id = Auth::user()->id;
+            //Student
+            if(Auth::user()->role_id == 5)
+            {
+                $tempArr = collect();
+                $exams = collect();
+                $subjects_ids = UsersModel::find($user_id)->students_subjects()->get();
+
+                foreach($subjects_ids as $subject)
+                {
+                    $events = ExamsSchedule::where('subject_id', $subject->id)
+                    ->join('exams_types', 'exams_schedule.exam_type', '=', 'exams_types.id')
+                    ->join('schools', 'schools.academic_id', '=', 'exams_schedule.academic_id')
+                    ->where('schools.id',  Auth::user()->school_id)
+                    ->get();
+
+                    $exams = $exams->merge($events);
+                }
+
+                foreach($exams as $exam)
+                {
+                    $subject = Subjects::where('id', $exam->subject_id)->first();
+                    $tempArr->push([
+                        'title' => $exam->name . ' - '. $subject->name,
+                        'start' => $exam->exam_start,
+                        'end' => $exam->exam_end,
+                        'color' => $exam->color,
+                    ]);
+                }
+                return response()->json($tempArr);
+                
+            }
+            return response()->json([
+                'status' => false
+            ]);
+        }
+    }
+
 }

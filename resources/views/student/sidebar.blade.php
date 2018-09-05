@@ -37,7 +37,7 @@
     </a>
     <ul>
         <li>
-            <a href="javascript:void(0)">דף מבחנים</a>
+            <a href="/exams_schedule">דף מבחנים</a>
         </li>
         <li>
             <a href="javascript:void(0)">ציונים שוטפים ותקופתיים</a>

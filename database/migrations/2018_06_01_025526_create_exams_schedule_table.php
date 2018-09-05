@@ -20,9 +20,10 @@ class CreateExamsScheduleTable extends Migration
             $table->unsignedInteger('academic_id'); //NOTE: Foreign Key academic_semesters->id
             $table->unsignedInteger('subject_id'); //NOTE: Foreign Key subjects->id
             
-            $table->date('exam_date');
-            $table->time('exam_start');
-            $table->time('exam_end');
+            $table->timestamp('exam_start');
+            $table->timestamp('exam_end');
+            
+            $table->string('color');
 
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
