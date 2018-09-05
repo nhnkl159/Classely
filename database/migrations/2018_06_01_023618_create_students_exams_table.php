@@ -15,6 +15,7 @@ class CreateStudentsExamsTable extends Migration
     {
         Schema::create('students_exams', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('academic_id'); //NOTE: Foreign Key academic_semesters->id
             $table->unsignedInteger('exam_type'); //NOTE: Foreign Key exams_types->id
             $table->unsignedInteger('student_id'); //NOTE: Foreign Key users->id
             $table->unsignedInteger('subject_id'); //NOTE: Foreign Key subjects->id

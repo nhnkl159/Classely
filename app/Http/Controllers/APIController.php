@@ -13,6 +13,7 @@ use App\Models\Subjects as Subjects;
 use App\Models\Classes as Classes;
 use App\Models\Routine as Routine;
 use App\Models\Attendance as Attendance;
+use App\Models\Behaviour as Behaviour;
 use App\Models\GlobalMessages;
 
 class APIController extends Controller
@@ -120,16 +121,18 @@ class APIController extends Controller
 
             //Class
             $class_id = UsersModel::find($user_id)->student_class()->first();
-            $teacher = Classes::find($class_id->id)->teacher()->get();
-
-            $teachers = $teachers->merge($teacher);
-
-            $teachers = $teachers->unique('id');
-
+            if($class_id != null)
+            {
+                $teacher = Classes::find($class_id->id)->teacher()->get();
+    
+                $teachers = $teachers->merge($teacher);
+    
+                $teachers = $teachers->unique('id');
+            }
+            
             $teachers = $teachers->map(function ($item, $key) {
                 return collect($item)->except(['username', 'password', 'reset_key', 'remember_token', 'created_at', 'updated_at', 'role_id', 'status', 'school_id', 'pivot'])->toArray();
             });
-
             return response()->json([
                 'status' => true,
                 'data' => $teachers
@@ -152,15 +155,23 @@ class APIController extends Controller
             $user_id = Auth::user()->id;
 
             $class_id = UsersModel::find($user_id)->student_class()->first();
-            $students = Classes::find($class_id->id)->students()->get();
 
-            $students = $students->map(function ($item, $key) {
-                return collect($item)->except(['username', 'password', 'reset_key', 'remember_token', 'created_at', 'updated_at', 'role_id', 'status', 'school_id', 'pivot'])->toArray();
-            });
+            if($class_id != null)
+            {
+                $students = Classes::find($class_id->id)->students()->get();
+
+                $students = $students->map(function ($item, $key) {
+                    return collect($item)->except(['username', 'password', 'reset_key', 'remember_token', 'created_at', 'updated_at', 'role_id', 'status', 'school_id', 'pivot'])->toArray();
+                });
+    
+                return response()->json([
+                    'status' => true,
+                    'data' => $students
+                ]);
+            }
 
             return response()->json([
-                'status' => true,
-                'data' => $students
+                'status' => false
             ]);
         }
     }
@@ -182,25 +193,27 @@ class APIController extends Controller
             {
                 $tempArr = collect();
                 $class_id = UsersModel::find($user_id)->student_class()->first();
-                $routine = Routine::where('class_id', $class_id->id)->get();
-                
-                foreach($routine as $class)
+                if($class_id != null)
                 {
-                    $subject = Subjects::where('id', $class->subject_id)->first();
-                    $tempArr->push([
-                        'title' => $subject->name,
-                        'dow' => [$class->day_id-1],
-                        'start' => $class->time_start,
-                        'end' => $class->time_end,
-                        'color' => $class->color,
-                    ]);
+                    $routine = Routine::where('class_id', $class_id->id)->get();
+                    
+                    foreach($routine as $class)
+                    {
+                        $subject = Subjects::where('id', $class->subject_id)->first();
+                        $tempArr->push([
+                            'title' => $subject->name,
+                            'dow' => [$class->day_id-1],
+                            'start' => $class->time_start,
+                            'end' => $class->time_end,
+                            'color' => $class->color,
+                        ]);
+                    }
+                    return response()->json($tempArr);
                 }
-
-                return response()->json($tempArr);
             }
             return response()->json([
                 'status' => false
-            ], 500);
+            ]);
         }
     }
 
@@ -251,7 +264,70 @@ class APIController extends Controller
             }
             return response()->json([
                 'status' => false
-            ], 500);
+            ]);
+        }
+    }
+
+    /**
+    * Handle the behaviour json api
+    * 
+    * @param  \Illuminate\Http\Request $request
+    *
+    * @return Response
+    */
+    public function behaviour_json(Request $request)
+    {
+        if ($request->ajax())
+        {
+            $user_id = Auth::user()->id;
+            //Student
+            if(Auth::user()->role_id == 5)
+            {
+                $events = Behaviour::where('student_id', $user_id)->orderBy('behav_date', 'desc')->join('behaviour_types', 'students_behaviour.behaviour_type', '=', 'behaviour_types.id')->get();
+
+                return response()->json([
+                    'status' => true,
+                    'data' => $events
+                ]);
+            }
+
+            return response()->json([
+                'status' => false
+            ]);
+        }
+    }
+
+    /**
+    * Handle the behaviour json api
+    * 
+    * @param  \Illuminate\Http\Request $request
+    *
+    * @return Response
+    */
+    public function behavior_chart(Request $request)
+    {
+        if ($request->ajax())
+        {
+            $user_id = Auth::user()->id;
+            $tempArr = collect();
+            $types = DB::table('behaviour_types')->get();
+            //Student
+            if(Auth::user()->role_id == 5)
+            {
+                foreach($types as $type)
+                {
+                    $tempArr[$type->behaviour_name] = Behaviour::where('behaviour_type', $type->id)->count();
+                }
+
+                return response()->json([
+                    'status' => true,
+                    'data' => $tempArr
+                ]);
+            }
+
+            return response()->json([
+                'status' => false
+            ]);
         }
     }
 }

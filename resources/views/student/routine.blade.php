@@ -21,7 +21,7 @@
                 <h3 class="block-title">מערכת שעות</h3>
             </div>
             <div class="block-content">
-                <div class="js-calendar" style="height: auto"></div>
+                <div class="js-calendar"></div>
             </div>
         </div>
     </div>
@@ -36,5 +36,5 @@
 
 <script src="{{ asset('assets/js/plugins/chartjs/Chart.bundle.min.js') }}"></script>
 <script src="{{ asset('assets/js/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
-@include('assets.js.global.routine')
+@include('assets.js.student.routine')
 @stop

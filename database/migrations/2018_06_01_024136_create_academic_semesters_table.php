@@ -14,11 +14,11 @@ class CreateAcademicSemestersTable extends Migration
     public function up()
     {
         Schema::create('academic_semesters', function (Blueprint $table) {
+            $table->increments('id');
             $table->unsignedInteger('school_id'); //NOTE: Foreign Key schools->id
             $table->timestamp('semester_1_start')->nullable();
             $table->timestamp('semester_2_start')->nullable();
             $table->timestamp('semester_2_end')->nullable();
-            $table->primary('school_id');
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
         });

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
 use Hash;
 use Auth;
 
@@ -16,6 +15,114 @@ class UsersController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+    }
+
+        /**
+     * Display a listing of the resource.
+     *
+     * @return Response
+     */
+    public function index()
+    {
+        if(Auth::user()->role_id == 5)
+        {
+            return view('student.noticeboard');
+        }
+    }
+
+    public function indexsettings()
+    {
+        if(!Auth::user()->status)
+        {
+            $data = json_decode(Auth::user()->details, true);
+            if(!empty(Auth::user()->email) && !empty($data['firstName']) && !empty($data['lastName']) && !empty($data['address']) && !empty($data['city']) && !empty($data['zipcode']) && !empty($data['dateOfBirth']) && !empty($data['phoneNumber']))
+            {
+                $avatar = '';
+                if($data['gender'] == 0)
+                {
+                    $avatar = 'avatar-boy'.rand(1,7).'.svg';
+                }
+                else
+                {
+                    $avatar = 'avatar-girl'.rand(1,7).'.svg';
+                }
+                UsersModel::updateUserStatus(Auth::user()->id, true);
+                UsersModel::updateUserAvatar(Auth::user()->id, $avatar);
+                return redirect('/');
+            }
+        }
+        return view('global.settings');
+    }
+
+
+    public function indextudentscontact()
+    {
+        return view('global.studentscontact');
+    }
+    
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return Response
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @return Response
+     */
+    public function store()
+    {
+        //
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return Response
+     */
+    public function show($id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return Response
+     */
+    public function edit($id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  int  $id
+     * @return Response
+     */
+    public function update($id)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return Response
+     */
+    public function destroy($id)
+    {
+        //
     }
 
     /**

@@ -15,7 +15,8 @@ class CreateGlobalMessagesTable extends Migration
     {
         Schema::create('global_messages', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('school_id'); //NOTE: Foreign Key schools->d
+            $table->unsignedInteger('academic_id'); //NOTE: Foreign Key academic_semesters->id
+            $table->unsignedInteger('school_id'); //NOTE: Foreign Key schools->id
             $table->string('title');
             $table->text('body');
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));

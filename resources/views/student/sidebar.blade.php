@@ -1,5 +1,5 @@
 <li>
-    <a href="/student/dashboard">
+    <a href="/dashboard">
         <i class="fa fa-dashboard"></i>
         <span class="sidebar-mini-hide">עמוד ראשי</span>
     </a>
@@ -25,10 +25,10 @@
     <a href="/routine"><i class="fa fa-book"></i><span class="sidebar-mini-hide">מערכת שעות</span></a>
 </li>
 <li>
-    <a href="/student/attendance"><i class="fa fa-eye"></i><span class="sidebar-mini-hide">נוכחות</span></a>
+    <a href="/attendance"><i class="fa fa-eye"></i><span class="sidebar-mini-hide">נוכחות</span></a>
 </li>
 <li>
-    <a href="#"><i class="fa fa-ban"></i><span class="sidebar-mini-hide">אירועי משמעת</span></a>
+    <a href="/behaviour"><i class="fa fa-ban"></i><span class="sidebar-mini-hide">אירועי משמעת</span></a>
 </li>
 <li>
     <a class="nav-submenu" data-toggle="nav-submenu" href="#">

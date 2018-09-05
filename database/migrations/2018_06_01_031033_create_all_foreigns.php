@@ -69,6 +69,7 @@ class CreateAllForeigns extends Migration
             $table->foreign('exam_type')->references('id')->on('exams_types')->onDelete("cascade");
             $table->foreign('student_id')->references('id')->on('users')->onDelete("cascade");
             $table->foreign('subject_id')->references('id')->on('subjects')->onDelete("cascade");
+            $table->foreign('academic_id')->references('id')->on('academic_semesters')->onDelete("cascade");
         });
 
         //Academic Semesters Table
@@ -97,28 +98,31 @@ class CreateAllForeigns extends Migration
         {
             $table->foreign('exam_type')->references('id')->on('exams_types')->onDelete("cascade");
             $table->foreign('subject_id')->references('id')->on('subjects')->onDelete("cascade");
+            $table->foreign('academic_id')->references('id')->on('academic_semesters')->onDelete("cascade");
         });
 
         //Students Attendance Table
         Schema::table('students_attendance', function (Blueprint $table) 
         {
             $table->foreign('student_id')->references('id')->on('users')->onDelete("cascade");
-            $table->foreign('class_id')->references('id')->on('classes')->onDelete("cascade");
             $table->foreign('subject_id')->references('id')->on('subjects')->onDelete("cascade");
+            $table->foreign('academic_id')->references('id')->on('academic_semesters')->onDelete("cascade");
         });
 
         //Students Behaviour Table
         Schema::table('students_behaviour', function (Blueprint $table) 
         {
             $table->foreign('student_id')->references('id')->on('users')->onDelete("cascade");
-            $table->foreign('teacher_id')->references('id')->on('user_teachers')->onDelete("cascade");
+            $table->foreign('teacher_id')->references('user_id')->on('user_teachers')->onDelete("cascade");
             $table->foreign('behaviour_type')->references('id')->on('behaviour_types')->onDelete("cascade");
+            $table->foreign('academic_id')->references('id')->on('academic_semesters')->onDelete("cascade");
         });
 
         //Global messages Table
         Schema::table('global_messages', function (Blueprint $table) 
         {
             $table->foreign('school_id')->references('id')->on('schools')->onDelete("cascade");
+            $table->foreign('academic_id')->references('id')->on('academic_semesters')->onDelete("cascade");
         });
 
         //Temp Users Table

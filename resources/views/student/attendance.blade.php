@@ -21,7 +21,7 @@
                 <h3 class="block-title">נוכחות</h3>
             </div>
             <div class="block-content">
-                <div class="js-calendar" style="height: auto"></div>
+                <div class="js-calendar"></div>
             </div>
         </div>
     </div>

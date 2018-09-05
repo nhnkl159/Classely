@@ -19,15 +19,5 @@ class StudentController extends Controller
         $this->middleware('checkstatus');
     }
 
-    public function viewdashboard()
-    {
-        $globalmessages = new GlobalMessages;
-        $messages = Schools::find(Auth::user()->school_id)->globalmessages()->take(5)->orderBy('created_at', 'desc')->get();
-        return view('student.dashboard')->with('messages', $messages);
-    }
 
-    public function viewattendance()
-    {
-        return view('student.attendance');
-    }
 }

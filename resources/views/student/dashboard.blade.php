@@ -146,14 +146,8 @@
                             @foreach($messages as $message)
                             <tr id="noticeboard_read" data-toggle="modal" data-target="#modal-message" data-id="{{$message->id}}">
                                 <td>
-                                    <p class="font-w600 mb-10">{{ $message->title }}</p>
+                                    <p class="font-w600 mb-10">{{ $message->title }} <span class="badge badge-danger">הודעה כללית</span></p>
                                     <p class="text-muted mb-0">{{ texttruncate($message->body) }}</p>
-                                </td>
-                                <td>
-                                    <span class="badge badge-danger">הודעה כללית</span>
-                                </td>
-                                <td>
-                                    <em class="text-muted">{{ humanTiming($message->created_at) }}</em>
                                 </td>
                             </tr>
                             @endforeach
@@ -221,6 +215,6 @@
 <script src="{{ asset('assets/js/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
 <script src="{{ asset('assets/js/pages/be_comp_charts.js') }}"></script>
 @include('assets.js.student.dashboard')
-@include('assets.js.global.noticeboard')
-@include('assets.js.global.routine')
+@include('assets.js.student.noticeboard')
+@include('assets.js.student.routine')
 @stop

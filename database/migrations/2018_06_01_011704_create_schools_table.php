@@ -15,6 +15,7 @@ class CreateSchoolsTable extends Migration
     {
         Schema::create('schools', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('academic_id')->nullable();
             $table->unsignedInteger('school_number')->index();
             $table->json('details');
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));

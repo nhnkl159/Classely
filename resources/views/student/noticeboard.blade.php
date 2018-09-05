@@ -72,5 +72,5 @@
 
 @section('jsfiles')
 <script src="{{ asset('assets/js/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
-@include('assets.js.global.noticeboard')
+@include('assets.js.student.noticeboard')
 @stop
