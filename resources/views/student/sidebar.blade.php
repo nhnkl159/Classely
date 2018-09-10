@@ -40,11 +40,13 @@
             <a href="/exams_schedule">דף מבחנים</a>
         </li>
         <li>
-            <a href="javascript:void(0)">ציונים שוטפים ותקופתיים</a>
+            <a href="/exams">ציונים שוטפים ותקופתיים</a>
         </li>
+        @if(\App\models\Bagruts::where('student_id', Auth::user()->id)->count())
         <li>
-            <a href="javascript:void(0)">ציוני הגשה ובגרויות</a>
+            <a href="/bagruts">ציוני הגשה ובגרויות</a>
         </li>
+        @endif
     </ul>
 </li>
 <li class="nav-main-heading">
@@ -52,24 +54,11 @@
     <span class="sidebar-mini-hidden">אונליין</span>
 </li>
 <li>
-    <a href="#"><i class="fa fa-archive"></i><span class="sidebar-mini-hide">שיעורי בית</span></a>
+    <a href="/homework"><i class="fa fa-archive"></i><span class="sidebar-mini-hide">שיעורי בית</span></a>
 </li>
 <li>
-    <a href="#"><i class="fa fa-cloud-download"></i><span class="sidebar-mini-hide">חומרי לימוד</span></a>
+    <a href="/studymaterials"><i class="fa fa-cloud-download"></i><span class="sidebar-mini-hide">חומרי לימוד</span></a>
 </li>
 <li>
     <a href="#"><i class="fa fa-graduation-cap"></i><span class="sidebar-mini-hide">מבחנים אונליין</span></a>
-</li>
-<li class="nav-main-heading">
-    <span class="sidebar-mini-visible">דוחות וסטטיסטיקות</span>
-    <span class="sidebar-mini-hidden">דוחות וסטטיסטיקות</span>
-</li>
-<li>
-    <a href="#"><i class="fa fa-area-chart"></i><span class="sidebar-mini-hide">דוח נוכחות</span></a>
-</li>
-<li>
-    <a href="#"><i class="fa fa-bar-chart"></i><span class="sidebar-mini-hide">דוח מבחנים</span></a>
-</li>
-<li>
-    <a href="#"><i class="fa fa-line-chart"></i><span class="sidebar-mini-hide">דוח אירועי משמעת</span></a>
 </li>

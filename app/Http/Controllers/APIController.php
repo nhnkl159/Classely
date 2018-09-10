@@ -15,6 +15,10 @@ use App\Models\Routine as Routine;
 use App\Models\Attendance as Attendance;
 use App\Models\Behaviour as Behaviour;
 use App\Models\ExamsSchedule as ExamsSchedule;
+use App\Models\Exams as Exams;
+use App\Models\Bagruts as Bagruts;
+use App\Models\Homework as Homework;
+use App\Models\Studymaterials as Studymaterials;
 use App\Models\GlobalMessages;
 
 class APIController extends Controller
@@ -343,7 +347,7 @@ class APIController extends Controller
     }
 
     /**
-    * Handle the routine json api
+    * Handle the exams schedule json api
     * 
     * @param  \Illuminate\Http\Request $request
     *
@@ -390,5 +394,162 @@ class APIController extends Controller
             ]);
         }
     }
+
+
+    /**
+    * Handle the exams json api
+    * 
+    * @param  \Illuminate\Http\Request $request
+    *
+    * @return Response
+    */
+    public function exams_json(Request $request)
+    {
+        if ($request->ajax())
+        {
+            $user_id = Auth::user()->id;
+            //Student
+            if(Auth::user()->role_id == 5)
+            {
+                $exams = Exams::where('student_id', $user_id)->orderBy('exam_date', 'desc')
+                ->join('exams_types', 'students_exams.exam_type', '=', 'exams_types.id')
+                ->join('schools', 'schools.academic_id', '=', 'students_exams.academic_id')
+                ->where('schools.id',  Auth::user()->school_id)
+                ->get();
+
+                foreach($exams as $exam)
+                {
+                    $subject = Subjects::where('id', $exam->subject_id)->first();
+                    $exam['subject_name'] = $subject->name;
+                }
+
+                return response()->json([
+                    'status' => true,
+                    'data' => $exams
+                ]);
+            }
+
+            return response()->json([
+                'status' => false
+            ]);
+        }
+    }
+
+    /**
+    * Handle the bagruts json api
+    * 
+    * @param  \Illuminate\Http\Request $request
+    *
+    * @return Response
+    */
+    public function bagruts_json(Request $request)
+    {
+        if ($request->ajax())
+        {
+            $user_id = Auth::user()->id;
+            //Student
+            if(Auth::user()->role_id == 5)
+            {
+                UsersModel::find($user_id)->students_subjects()->get();
+
+                $bagruts = Bagruts::where('student_id', $user_id)->orderBy('bagrut_date', 'desc')
+                ->join('schools', 'schools.academic_id', '=', 'students_bagruts.academic_id')
+                ->where('schools.id',  Auth::user()->school_id)
+                ->get();
+
+                foreach($bagruts as $bagrut)
+                {
+                    $subject = Subjects::where('id', $bagrut->subject_id)->first();
+                    $bagrut['subject_name'] = $subject->name;
+                }
+
+                return response()->json([
+                    'status' => true,
+                    'data' => $bagruts
+                ]);
+            }
+
+            return response()->json([
+                'status' => false
+            ]);
+        }
+    }
+
+    /**
+    * Handle the homework json api
+    * 
+    * @param  \Illuminate\Http\Request $request
+    *
+    * @return Response
+    */
+    public function homework_json(Request $request)
+    {
+        if ($request->ajax())
+        {
+            $user_id = Auth::user()->id;
+            //Student
+            if(Auth::user()->role_id == 5)
+            {
+                $homework = Homework::where('subject_id', 1)
+                ->join('schools', 'schools.academic_id', '=', 'students_homework.academic_id')
+                ->where('schools.id',  Auth::user()->school_id)
+                ->get();
+
+                foreach($homework as $work)
+                {
+                    $subject = Subjects::where('id', $work->subject_id)->first();
+                    $work['subject_name'] = $subject->name;
+                }
+
+                return response()->json([
+                    'status' => true,
+                    'data' => $homework
+                ]);
+            }
+
+            return response()->json([
+                'status' => false
+            ]);
+        }
+    }
+
+    /**
+    * Handle the studymaterials json api
+    * 
+    * @param  \Illuminate\Http\Request $request
+    *
+    * @return Response
+    */
+    public function studymaterials_json(Request $request)
+    {
+        if ($request->ajax())
+        {
+            $user_id = Auth::user()->id;
+            //Student
+            if(Auth::user()->role_id == 5)
+            {
+                $homework = Studymaterials::where('subject_id', 1)
+                ->join('schools', 'schools.academic_id', '=', 'students_studymaterials.academic_id')
+                ->where('schools.id',  Auth::user()->school_id)
+                ->get();
+
+                foreach($homework as $work)
+                {
+                    $subject = Subjects::where('id', $work->subject_id)->first();
+                    $work['subject_name'] = $subject->name;
+                }
+
+                return response()->json([
+                    'status' => true,
+                    'data' => $homework
+                ]);
+            }
+
+            return response()->json([
+                'status' => false
+            ]);
+        }
+    }
+
 
 }

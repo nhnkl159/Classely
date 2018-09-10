@@ -16,6 +16,7 @@ Auth::Routes();
 
 /**
  * //TODO:
+ * Build API for download homework / study materials, one file or multipile (zip) support.
  */
 
 
@@ -50,6 +51,11 @@ Route::get('/studentscontact', 'UsersController@indextudentscontact')->name('stu
 Route::get('/routine', 'RouteController@index')->name('routine');
 Route::get('/behaviour', 'BehaviourController@index')->name('behaviour');
 Route::get('/exams_schedule', 'ExamsScheduleController@index')->name('exams_schedule');
+Route::get('/exams', 'ExamsController@index')->name('exams');
+Route::get('/bagruts', 'BagrutsController@index')->name('bagruts');
+Route::get('/homework', 'HomeworkController@index')->name('homework');
+Route::get('/studymaterials', 'StudymaterialsController@index')->name('studymaterials');
+
 /**
 * API Controllers Global
 * Global api functions and routes.
@@ -68,4 +74,8 @@ Route::get('/api/attendance_json', 'APIController@attendance_json');
 Route::get('/api/behaviour_json', 'APIController@behaviour_json');
 Route::get('/api/behavior_chart', 'APIController@behavior_chart');
 Route::get('/api/exams_schedule_json', 'APIController@exams_schedule_json');
+Route::get('/api/exams_json', 'APIController@exams_json');
+Route::get('/api/bagruts_json', 'APIController@bagruts_json');
+Route::get('/api/homework_json', 'APIController@homework_json');
+Route::get('/api/studymaterials_json', 'APIController@studymaterials_json');
 

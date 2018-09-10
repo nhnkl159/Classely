@@ -131,6 +131,36 @@ class CreateAllForeigns extends Migration
             $table->foreign('school_id')->references('id')->on('schools')->onDelete("cascade");
             $table->foreign('role_id')->references('id')->on('users_roles')->onDelete("cascade");
         });
+
+        //Students Bagruts Table
+        Schema::table('students_bagruts', function (Blueprint $table) 
+        {
+            $table->foreign('academic_id')->references('id')->on('academic_semesters')->onDelete("cascade");
+            $table->foreign('student_id')->references('id')->on('users')->onDelete("cascade");
+            $table->foreign('subject_id')->references('id')->on('subjects')->onDelete("cascade");
+        });
+
+        //Students Homework Table
+        Schema::table('students_homework', function (Blueprint $table) 
+        {
+            $table->foreign('academic_id')->references('id')->on('academic_semesters')->onDelete("cascade");
+            $table->foreign('teacher_id')->references('user_id')->on('user_teachers')->onDelete("cascade");
+            $table->foreign('subject_id')->references('id')->on('subjects')->onDelete("cascade");
+        });
+
+        //Students Homework Answers Table
+        Schema::table('students_homework_answers', function (Blueprint $table) 
+        {
+            $table->foreign('homework_id')->references('id')->on('students_homework')->onDelete("cascade");
+        });
+
+        //Students Study Materials Table
+        Schema::table('students_studymaterials', function (Blueprint $table) 
+        {
+            $table->foreign('academic_id')->references('id')->on('academic_semesters')->onDelete("cascade");
+            $table->foreign('teacher_id')->references('user_id')->on('user_teachers')->onDelete("cascade");
+            $table->foreign('subject_id')->references('id')->on('subjects')->onDelete("cascade");
+        });
     }
 
     /**
